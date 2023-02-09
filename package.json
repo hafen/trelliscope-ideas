@@ -1,0 +1,90 @@
+{
+  "name": "trelliscope-ideas",
+  "version": "0.0.0",
+  "homepage": ".",
+  "dependencies": {
+    "@emotion/react": "latest",
+    "@emotion/styled": "latest",
+    "@mui/icons-material": "latest",
+    "@mui/material": "latest",
+    "@mui/x-data-grid": "^5.17.22",
+    "@react-hook/window-size": "^3.1.1",
+    "ag-grid-community": "^29.0.0",
+    "ag-grid-react": "^29.0.0",
+    "d3-array": "^3.2.2",
+    "d3-scale": "^4.0.2",
+    "multi-column-sort": "^2.2.1",
+    "react": "latest",
+    "react-data-grid": "^7.0.0-beta.23",
+    "react-dom": "latest",
+    "react-intersection-observer": "^9.4.1"
+  },
+  "description": "https://github.com/mui/material-ui/blob/v5.11.7/docs/data/material/components/drawers/PersistentDrawerLeft.js",
+  "devDependencies": {
+    "eslint": "^8.22.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "2.7.1",
+    "react-scripts": "latest"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "pretty": "yarn prettier --write ./src"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest",
+      "prettier"
+    ],
+    "rules": {
+      "react/prop-types": 0,
+      "no-param-reassign": 0,
+      "react/jsx-props-no-spreading": 0,
+      "no-console": 0,
+      "react/jsx-filename-extension": 0,
+      "no-unused-vars": 1,
+      "import/prefer-default-export": 0,
+      "jsx-a11y/click-events-have-key-events": 0,
+      "jsx-a11y/no-static-element-interactions": 0,
+      "react-hooks/exhaustive-deps": 0,
+      "prettier/prettier": [
+        "error",
+        {
+          "trailingComma": "es5",
+          "tabWidth": 2,
+          "semi": true,
+          "singleQuote": true,
+          "quoteProps": "as-needed"
+        }
+      ]
+    },
+    "plugins": [
+      "prettier"
+    ]
+  },
+  "sideEffects": [
+    "*.css"
+  ]
+}
