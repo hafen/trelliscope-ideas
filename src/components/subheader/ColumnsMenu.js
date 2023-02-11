@@ -13,7 +13,19 @@ export default function ColumnsMenu({ columns, setColumns }) {
     setColumns(parseInt(newVal));
   }
   return (
-    <Box sx={{ minWidth: 140, display: 'flex', flexDirection: 'row', pr: 2 }}>
+    <Box
+      sx={{
+        minWidth: 140,
+        display: 'flex',
+        flexDirection: 'row',
+        pr: 1,
+        pl: 1.5,
+        ml: 3,
+        background: '#efefef',
+        height: 34,
+        borderRadius: 1,
+      }}
+    >
       <Box sx={{ pr: 0.5, fontSize: 15, fontWeight: 600, lineHeight: '35px' }}>
         Columns:
       </Box>

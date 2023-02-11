@@ -13,12 +13,15 @@ import VariableSelect from './VariableSelect';
 import { styled } from '@mui/material/styles';
 import NorthIcon from '@mui/icons-material/North';
 import SouthIcon from '@mui/icons-material/South';
+import { useSortContext } from '../../contexts/sortContext';
 
 const ListItem = styled('li')(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 
-export default function SortMenu({ metas, sortVars, setSortVars }) {
+export default function SortMenu({ metas }) {
+  const { sortVars, setSortVars } = useSortContext();
+
   function handleDelete(val) {
     const newSortVars = [...sortVars];
     setSortVars(newSortVars.filter((d) => d.name !== val));
@@ -41,6 +44,12 @@ export default function SortMenu({ metas, sortVars, setSortVars }) {
         sx={{
           display: 'flex',
           flexDirection: 'row',
+          height: '34px',
+          paddingLeft: '8px',
+          borderRadius: 1,
+          // background: 'rgba(255,255,255,0.3)',
+          // background: 'rgba(198,224,253, 0.6)',
+          background: '#efefef',
         }}
       >
         <Box
@@ -48,11 +57,10 @@ export default function SortMenu({ metas, sortVars, setSortVars }) {
             fontSize: 15,
             fontWeight: 600,
             lineHeight: '35px',
-            fontSize: 16,
             pr: 0.5,
           }}
         >
-          Sort:
+          Sort
         </Box>
         <Box>
           <Box

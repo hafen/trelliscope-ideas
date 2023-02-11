@@ -1,21 +1,23 @@
 import React, { Fragment } from 'react';
 import { InView } from 'react-intersection-observer';
+import { useSortContext } from '../contexts/sortContext';
 
 export default function Panels({
   sidebarWidth,
   sidebarOpen,
   data,
-  sortVars,
   sortBarWidth,
   labelVars,
   columns,
   setPanelInView,
 }) {
+  const { sortVars } = useSortContext();
+
   return (
     <div
       style={{
         width: `calc(100vw - ${
-          sidebarWidth * sidebarOpen + sortVars.length * sortBarWidth + 1
+          sidebarWidth * sidebarOpen + sortBarWidth + 1
         }px)`,
         height: 'calc(100vh - 108px)',
         overflowY: 'auto',
@@ -35,8 +37,8 @@ export default function Panels({
             key={d.__PANEL_KEY__}
             data={d}
             labelVars={labelVars}
-            sortVars={sortVars}
             setPanelInView={setPanelInView}
+            sortVars={sortVars}
           />
         ))}
       </div>
@@ -50,12 +52,8 @@ function Panel({ data, labelVars, sortVars, setPanelInView }) {
       as="div"
       threshold={1}
       onChange={(inView, entry) => {
-        if (inView) {
-          const res = {};
-          sortVars.forEach((vr) => {
-            res[vr.name] = data[vr.name];
-          });
-          setPanelInView(res);
+        if (inView && sortVars.length > 0) {
+          setPanelInView(data[sortVars[0].name]);
         }
       }}
     >
@@ -70,6 +68,7 @@ function Panel({ data, labelVars, sortVars, setPanelInView }) {
         <img
           style={{ width: '100%', objectFit: 'cover', aspectRatio: 1.6 }}
           src={`panels/${data.__PANEL_KEY__}.svg`}
+          alt="panel"
         />
         <div
           style={{

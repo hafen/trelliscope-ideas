@@ -12,13 +12,12 @@ import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import { TagSelect } from './VariableMultiSelect';
+import { TagSelect } from '../sidebar/VariableMultiSelect';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 export default function VariableSelect({ metas, handleSelect, nSortVars }) {
-  console.log('metas', metas);
   const [tagGroup, setTagGroup] = useState('__ALL__');
   const [open, setOpen] = useState(true);
 

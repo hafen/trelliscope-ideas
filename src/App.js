@@ -3,7 +3,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
-import MuiAppBar from '@mui/material/AppBar';
+import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
@@ -11,51 +11,37 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import SidebarContent from './components/SidebarContent';
+import SidebarContent from './components/sidebar/SidebarContent';
 import metas from './meta';
 import metaData from './metaData';
-import SortBars from './components/SortBars';
+import SortBar from './components/SortBar';
 import LayoutMenu from './components/LayoutMenu';
-import PanelContent from './components/PanelContent';
+import Panels from './components/Panels';
 import Table from './components/Table';
 import multiColumnSort from 'multi-column-sort';
+import { useSortContext } from './contexts/sortContext';
+import { useSidebarContext } from './contexts/sidebarContext';
+import Subheader from './components/subheader/Subheader';
 
-const sidebarWidth = 400;
 const sortBarWidth = 36;
-const showSortBars = true;
 
 const getColumnValue = (column, value) => value;
 
 export default function App() {
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
+  // const theme = useTheme();
+  const { sidebarOpen, sidebarWidth } = useSidebarContext();
   const [selectedVars, setSelectedVars] = useState([
     metas[2],
     // metas[3],
     metas[0],
   ]);
-  const [sortVars, setSortVars] = useState([
-    { name: 'continent', dir: 'ASC' },
-    // { name: 'country', dir: 'ASC' },
-    { name: 'mean_gdp', dir: 'ASC' },
-  ]);
+  const { sortVars } = useSortContext();
   const [panelInView, setPanelInView] = useState({});
   const [labelVars, setLabelVars] = useState(['continent', 'country']);
   const [layout, setLayout] = React.useState('grid');
   const [columns, setColumns] = useState(3);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
   const handleLayoutChange = (event) => {
-    if (event.target.value === 'table') {
-      handleDrawerClose();
-    }
     setLayout(event.target.value);
   };
 
@@ -70,20 +56,17 @@ export default function App() {
     );
   }, [metaData, sortVars]);
 
+  const extraWidth = sidebarWidth * sidebarOpen + sortBarWidth + 1;
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} color="default">
+      <AppBar
+        position="fixed"
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        color="default"
+      >
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: 'none' }) }}
-          >
-            {layout === 'grid' && <SettingsIcon />}
-          </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Gapminder life expectancy over time by country
           </Typography>
@@ -101,51 +84,45 @@ export default function App() {
         }}
         variant="persistent"
         anchor="left"
-        open={open}
+        open={sidebarOpen}
       >
-        <Header>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </Header>
         <SidebarContent
           metas={metas}
           selectedVars={selectedVars}
           setSelectedVars={setSelectedVars}
-          sortVars={sortVars}
-          setSortVars={setSortVars}
           labelVars={labelVars}
           setLabelVars={setLabelVars}
           sidebarWidth={sidebarWidth}
         />
       </Drawer>
-      <Main open={open}>
-        <Header />
+      <Main open={sidebarOpen && layout === 'grid'} sidebarWidth={sidebarWidth}>
         {layout === 'grid' && (
-          <>
-            <PanelContent
+          <div>
+            <Subheader
               metas={metas}
+              columns={columns}
+              setColumns={setColumns}
+              tot={metaData.length}
+              extraWidth={extraWidth}
+            />
+            <Panels
               sidebarWidth={sidebarWidth}
-              sidebarOpen={open}
+              sidebarOpen={sidebarOpen}
               data={sortedMetaData}
-              sortVars={sortVars}
-              setSortVars={setSortVars}
-              sortBarWidth={sortBarWidth * showSortBars}
+              sortBarWidth={sortBarWidth}
               labelVars={labelVars}
               columns={columns}
               setColumns={setColumns}
               setPanelInView={setPanelInView}
+              metas={metas}
             />
-            {showSortBars && (
-              <SortBars
-                sortVars={sortVars}
-                metas={metas}
-                metaData={metaData}
-                barWidth={sortBarWidth}
-                panelInView={panelInView}
-              />
-            )}
-          </>
+            <SortBar
+              metas={metas}
+              metaData={metaData}
+              barWidth={sortBarWidth}
+              panelInView={panelInView}
+            />
+          </div>
         )}
         {layout === 'table' && <Table metas={metas} data={metaData} />}
       </Main>
@@ -153,47 +130,22 @@ export default function App() {
   );
 }
 
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    flexGrow: 1,
-    padding: theme.spacing(0),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: `-${sidebarWidth}px`,
-    ...(open && {
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      marginLeft: 0,
-    }),
-  })
-);
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-  transition: theme.transitions.create(['margin', 'width'], {
+const Main = styled('main', {
+  shouldForwardProp: (prop) => !['open', 'sidebarWidth'].includes(prop),
+})(({ theme, open, sidebarWidth }) => ({
+  flexGrow: 1,
+  marginTop: 64,
+  padding: theme.spacing(0),
+  transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+  marginLeft: `-${sidebarWidth}px`,
   ...(open && {
-    width: `calc(100% - ${sidebarWidth}px)`,
-    marginLeft: `${sidebarWidth}px`,
-    transition: theme.transitions.create(['margin', 'width'], {
+    transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    marginLeft: 0,
   }),
-}));
-
-const Header = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-  justifyContent: 'flex-end',
 }));

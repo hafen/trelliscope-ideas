@@ -1,20 +1,17 @@
 import React from 'react';
 import VariableMultiSelect from './VariableMultiSelect';
 import Divider from '@mui/material/Divider';
-import VariableItem from './VariableItem';
+import ExploreItem from './ExploreItem';
 
 export default function SidebarContent({
   metas,
   selectedVars,
   setSelectedVars,
-  sortVars,
-  setSortVars,
   labelVars,
   setLabelVars,
-  sidebarWidth,
 }) {
   return (
-    <div style={{ overflow: 'hidden' }}>
+    <div style={{ overflow: 'hidden', marginTop: 76 }}>
       <VariableMultiSelect
         selectedVars={selectedVars}
         setSelectedVars={setSelectedVars}
@@ -28,15 +25,12 @@ export default function SidebarContent({
       >
         {selectedVars.map((d) => (
           <div key={d.varname}>
-            <VariableItem
+            <ExploreItem
               meta={d}
               selectedVars={selectedVars}
               setSelectedVars={setSelectedVars}
-              sortVars={sortVars}
-              setSortVars={setSortVars}
               labelVars={labelVars}
               setLabelVars={setLabelVars}
-              sidebarWidth={sidebarWidth}
             />
             <Divider />
           </div>

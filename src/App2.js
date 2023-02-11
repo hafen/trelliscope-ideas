@@ -12,12 +12,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import SidebarContent from './components/SidebarContent';
+import SidebarContent from './components/sidebar/SidebarContent';
 import metas from './meta';
 import metaData from './metaData';
-import SortBars from './components/SortBars';
+import SortBar from './components/SortBar';
 import LayoutMenu from './components/LayoutMenu';
-import PanelContent from './components/PanelContent';
+import PanelContent from './components/panels/PanelContent';
 import Table from './components/Table';
 import multiColumnSort from 'multi-column-sort';
 
@@ -95,7 +95,7 @@ export default function App() {
             </IconButton>
           )}
           <Typography variant="h6" noWrap component="div">
-          Gapminder life expectancy over time by country
+            Gapminder life expectancy over time by country
           </Typography>
         </Toolbar>
       </AppBar>
@@ -113,17 +113,15 @@ export default function App() {
         }}
       >
         <Toolbar />
-        <div style={{marginTop: 15, overflow: 'hidden'}}>
-        <SidebarContent
-          metas={metas}
-          selectedVars={selectedVars}
-          setSelectedVars={setSelectedVars}
-          sortVars={sortVars}
-          setSortVars={setSortVars}
-          labelVars={labelVars}
-          setLabelVars={setLabelVars}
-          sidebarWidth={sidebarWidth}
-        />
+        <div style={{ marginTop: 15, overflow: 'hidden' }}>
+          <SidebarContent
+            metas={metas}
+            selectedVars={selectedVars}
+            setSelectedVars={setSelectedVars}
+            labelVars={labelVars}
+            setLabelVars={setLabelVars}
+            sidebarWidth={sidebarWidth}
+          />
         </div>
       </Drawer>
       <Box component="main">hi</Box>

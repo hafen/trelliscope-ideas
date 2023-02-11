@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { scaleQuantile } from 'd3-scale';
 import { extent, nice } from 'd3-array';
 import { useWindowHeight } from '@react-hook/window-size';
+import { useSortContext } from '../contexts/sortContext';
 
 const headerHeight = 64;
 
@@ -14,51 +15,56 @@ const barFactory = {
   factor: <FactorBar />,
 };
 
-export default function SortBar({
-  sortVar,
-  meta,
-  sortIndex,
-  barWidth,
-  metaData,
-  inView,
-}) {
+export default function SortBar({ metas, barWidth, metaData, panelInView }) {
   const height = useWindowHeight() - headerHeight;
-
+  const { sortVars } = useSortContext();
+  const sortVar = sortVars[0];
+  const meta = useMemo(() => {
+    return metas.filter((d) => d.varname === sortVar.name)[0];
+  });
   return (
     <div
       style={{
+        position: 'fixed',
+        right: 0,
+        top: 64,
+        height: 'calc(100% - 64px)',
         width: barWidth,
-        position: 'absolute',
-        left: sortIndex * barWidth,
-        boxSizing: 'border-box',
-        background: 'lightgray',
-        // border: '1px solid darkgray',
-        height: '100%',
       }}
     >
       <div
         style={{
-          height: barVarHeight + 1,
-          paddingTop: 10,
-          background: 'black',
-          color: 'rgba(255,255,255,0.9)',
-          border: '1px solid #444444',
-          fontSize: 15,
-          fontWeight: 600,
-          paddingLeft: 6,
-          marginLeft: -1,
-          marginTop: -1,
+          width: barWidth,
+          boxSizing: 'border-box',
+          background: 'lightgray',
+          // border: '1px solid darkgray',
+          height: '100%',
         }}
       >
-        <div style={{ writingMode: 'vertical-rl' }}>{sortVar.name}</div>
+        <div
+          style={{
+            height: barVarHeight + 1,
+            paddingTop: 10,
+            background: 'black',
+            color: 'rgba(255,255,255,0.9)',
+            border: '1px solid #444444',
+            fontSize: 15,
+            fontWeight: 600,
+            paddingLeft: 6,
+            marginLeft: -1,
+            marginTop: -1,
+          }}
+        >
+          <div style={{ writingMode: 'vertical-rl' }}>{sortVar.name}</div>
+        </div>
+        {barFactory[meta.type] &&
+          React.cloneElement(barFactory[meta.type], {
+            meta,
+            height: height - barVarHeight,
+            currentValue: panelInView,
+            metaData,
+          })}
       </div>
-      {barFactory[meta.type] &&
-        React.cloneElement(barFactory[meta.type], {
-          meta,
-          height: height - barVarHeight,
-          currentValue: inView,
-          metaData,
-        })}
     </div>
   );
 }

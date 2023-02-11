@@ -10,17 +10,19 @@ import SortIcon from '@mui/icons-material/Sort';
 import NorthIcon from '@mui/icons-material/North';
 import SouthIcon from '@mui/icons-material/South';
 import Chip from '@mui/material/Chip';
+import { useSortContext } from '../../contexts/sortContext';
+import { useSidebarContext } from '../../contexts/sidebarContext';
 
-export default function VariableItem({
+export default function ExploreItem({
   meta,
   selectedVars,
   setSelectedVars,
-  sortVars,
-  setSortVars,
   labelVars,
   setLabelVars,
-  sidebarWidth,
 }) {
+  const { sortVars, setSortVars } = useSortContext();
+  const { sidebarWidth } = useSidebarContext();
+
   function handleRemove(val) {
     setSelectedVars(selectedVars.filter((d) => d.varname !== val));
   }
