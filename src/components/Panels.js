@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { InView } from 'react-intersection-observer';
 import { useSortContext } from '../contexts/sortContext';
+import { useDisplayListContext } from '../contexts/displayListContext';
 
 export default function Panels({
   sidebarWidth,
@@ -12,6 +13,8 @@ export default function Panels({
   setPanelInView,
 }) {
   const { sortVars } = useSortContext();
+  const { selectedDisplayObject } = useDisplayListContext();
+  const panelPrefix = `displays/${selectedDisplayObject.name}/panels`;
 
   return (
     <div
@@ -39,6 +42,7 @@ export default function Panels({
             labelVars={labelVars}
             setPanelInView={setPanelInView}
             sortVars={sortVars}
+            panelPrefix={panelPrefix}
           />
         ))}
       </div>
@@ -46,7 +50,7 @@ export default function Panels({
   );
 }
 
-function Panel({ data, labelVars, sortVars, setPanelInView }) {
+function Panel({ data, labelVars, sortVars, setPanelInView, panelPrefix }) {
   return (
     <InView
       as="div"
@@ -67,7 +71,7 @@ function Panel({ data, labelVars, sortVars, setPanelInView }) {
       >
         <img
           style={{ width: '100%', objectFit: 'cover', aspectRatio: 1.6 }}
-          src={`panels/${data.__PANEL_KEY__}.svg`}
+          src={`${panelPrefix}/${data.__PANEL_KEY__}.svg`}
           alt="panel"
         />
         <div

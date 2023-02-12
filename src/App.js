@@ -15,13 +15,13 @@ import SidebarContent from './components/sidebar/SidebarContent';
 import metas from './meta';
 import metaData from './metaData';
 import SortBar from './components/SortBar';
-import LayoutMenu from './components/LayoutMenu';
 import Panels from './components/Panels';
 import Table from './components/Table';
 import multiColumnSort from 'multi-column-sort';
 import { useSortContext } from './contexts/sortContext';
 import { useSidebarContext } from './contexts/sidebarContext';
 import Subheader from './components/subheader/Subheader';
+import Header from './components/Header';
 
 const sortBarWidth = 36;
 
@@ -40,10 +40,6 @@ export default function App() {
   const [labelVars, setLabelVars] = useState(['continent', 'country']);
   const [layout, setLayout] = React.useState('grid');
   const [columns, setColumns] = useState(3);
-
-  const handleLayoutChange = (event) => {
-    setLayout(event.target.value);
-  };
 
   const sortedMetaData = useMemo(() => {
     if (sortVars.length === 0) {
@@ -67,10 +63,7 @@ export default function App() {
         color="default"
       >
         <Toolbar>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            Gapminder life expectancy over time by country
-          </Typography>
-          <LayoutMenu layout={layout} handleLayoutChange={handleLayoutChange} />
+          <Header layout={layout} setLayout={setLayout} />
         </Toolbar>
       </AppBar>
       <Drawer
