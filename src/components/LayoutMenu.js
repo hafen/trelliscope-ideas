@@ -7,8 +7,15 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import GridViewIcon from '@mui/icons-material/GridView';
 import ListIcon from '@mui/icons-material/List';
+import { useLayoutContext } from '../contexts/layoutContext';
 
-export default function LayoutMenu({ layout, handleLayoutChange }) {
+export default function LayoutMenu() {
+  const { layout, setLayout } = useLayoutContext();
+
+  const handleLayoutChange = (event) => {
+    setLayout(event.target.value);
+  };
+
   return (
     <Box
       sx={{

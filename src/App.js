@@ -1,16 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import SettingsIcon from '@mui/icons-material/Settings';
-import QueryStatsIcon from '@mui/icons-material/QueryStats';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import SidebarContent from './components/sidebar/SidebarContent';
 import metas from './meta';
 import metaData from './metaData';
@@ -20,6 +14,7 @@ import Table from './components/Table';
 import multiColumnSort from 'multi-column-sort';
 import { useSortContext } from './contexts/sortContext';
 import { useSidebarContext } from './contexts/sidebarContext';
+import { useLayoutContext } from './contexts/layoutContext';
 import Subheader from './components/subheader/Subheader';
 import Header from './components/Header';
 
@@ -36,9 +31,9 @@ export default function App() {
     metas[0],
   ]);
   const { sortVars } = useSortContext();
+  const { layout } = useLayoutContext();
   const [panelInView, setPanelInView] = useState({});
   const [labelVars, setLabelVars] = useState(['continent', 'country']);
-  const [layout, setLayout] = React.useState('grid');
   const [columns, setColumns] = useState(3);
 
   const sortedMetaData = useMemo(() => {
@@ -63,7 +58,7 @@ export default function App() {
         color="default"
       >
         <Toolbar>
-          <Header layout={layout} setLayout={setLayout} />
+          <Header />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -88,16 +83,16 @@ export default function App() {
           sidebarWidth={sidebarWidth}
         />
       </Drawer>
-      <Main open={sidebarOpen && layout === 'grid'} sidebarWidth={sidebarWidth}>
+      <Main open={sidebarOpen} sidebarWidth={sidebarWidth}>
+        <Subheader
+          metas={metas}
+          columns={columns}
+          setColumns={setColumns}
+          tot={metaData.length}
+          extraWidth={extraWidth}
+        />
         {layout === 'grid' && (
           <div>
-            <Subheader
-              metas={metas}
-              columns={columns}
-              setColumns={setColumns}
-              tot={metaData.length}
-              extraWidth={extraWidth}
-            />
             <Panels
               sidebarWidth={sidebarWidth}
               sidebarOpen={sidebarOpen}
@@ -109,15 +104,23 @@ export default function App() {
               setPanelInView={setPanelInView}
               metas={metas}
             />
-            <SortBar
-              metas={metas}
-              metaData={metaData}
-              barWidth={sortBarWidth}
-              panelInView={panelInView}
-            />
           </div>
         )}
-        {layout === 'table' && <Table metas={metas} data={metaData} />}
+        {layout === 'table' && (
+          <Table
+            sidebarWidth={sidebarWidth}
+            sidebarOpen={sidebarOpen}
+            sortBarWidth={sortBarWidth}
+            metas={metas}
+            data={sortedMetaData}
+          />
+        )}
+        <SortBar
+          metas={metas}
+          metaData={metaData}
+          barWidth={sortBarWidth}
+          panelInView={panelInView}
+        />
       </Main>
     </Box>
   );
@@ -128,6 +131,8 @@ const Main = styled('main', {
 })(({ theme, open, sidebarWidth }) => ({
   flexGrow: 1,
   marginTop: 64,
+  overflow: 'hidden',
+  height: 'calc(100vh - 68px)',
   padding: theme.spacing(0),
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,

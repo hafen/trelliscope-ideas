@@ -64,7 +64,7 @@ export default function VariableMultiSelect({
   });
 
   return (
-    <Box sx={{ p: 1, display: 'flex', flexDirection: 'row' }}>
+    <Box sx={{ p: 1, display: 'flex', flexDirection: 'row', mr: 2 }}>
       <Autocomplete
         multiple
         // open

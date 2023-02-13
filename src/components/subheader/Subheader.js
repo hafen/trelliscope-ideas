@@ -2,6 +2,7 @@ import ColumnsMenu from '../subheader/ColumnsMenu';
 import SortMenu from '../subheader/SortMenu';
 import ExploreMenu from './ExploreMenu';
 import LabelsMenu from './LabelsMenu';
+import { useLayoutContext } from '../../contexts/layoutContext';
 
 export default function Subheader({
   metas,
@@ -10,6 +11,7 @@ export default function Subheader({
   tot,
   extraWidth,
 }) {
+  const { layout } = useLayoutContext();
   return (
     <div
       style={{
@@ -30,7 +32,9 @@ export default function Subheader({
       <div style={{ display: 'flex', flexDirection: 'row', flexGrow: 1 }}>
         <ExploreMenu />
         <SortMenu metas={metas} />
-        <ColumnsMenu columns={columns} setColumns={setColumns} />
+        {layout === 'grid' && (
+          <ColumnsMenu columns={columns} setColumns={setColumns} />
+        )}
         <LabelsMenu />
       </div>
       <div>

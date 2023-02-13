@@ -148,7 +148,7 @@ export default function ExploreItem({
               label={
                 <span>
                   sorted{' '}
-                  {sortBy[0].dir === 'ASC' ? (
+                  {sortBy[0].dir === 'DESC' ? (
                     <SouthIcon fontSize="inherit" />
                   ) : (
                     <NorthIcon fontSize="inherit" />

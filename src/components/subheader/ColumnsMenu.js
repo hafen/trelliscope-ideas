@@ -21,7 +21,7 @@ export default function ColumnsMenu({ columns, setColumns }) {
         pr: 1,
         pl: 1.5,
         ml: 3,
-        background: '#efefef',
+        background: '#efefefaa',
         height: 34,
         borderRadius: 1,
       }}

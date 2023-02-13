@@ -49,7 +49,7 @@ export default function SortMenu({ metas }) {
           borderRadius: 1,
           // background: 'rgba(255,255,255,0.3)',
           // background: 'rgba(198,224,253, 0.6)',
-          background: '#efefef',
+          background: '#efefefaa',
         }}
       >
         <Box
@@ -75,14 +75,14 @@ export default function SortMenu({ metas }) {
             {sortVars.map((d) => {
               let label = (
                 <span>
-                  <SouthIcon fontSize="inherit" />
+                  <NorthIcon fontSize="inherit" />
                   {d.name}
                 </span>
               );
               if (d.dir === 'DESC') {
                 label = (
                   <span>
-                    <NorthIcon fontSize="inherit" />
+                    <SouthIcon fontSize="inherit" />
                     {d.name}
                   </span>
                 );
