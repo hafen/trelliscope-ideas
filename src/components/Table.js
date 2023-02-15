@@ -41,7 +41,6 @@ export default function Table({
       },
     ];
     extraDisplays.forEach((d) => {
-      console.log(extraDisplays);
       res.push({
         field: '',
         headerName: `${d.name} vis`,

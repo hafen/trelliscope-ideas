@@ -78,7 +78,7 @@ export default function Table({
   const getContent = useCallback(
     (cell) => {
       const [col, row] = cell;
-      console.log(col, row);
+      // console.log(col, row);
       const dataRow = data[row];
       const curVal = dataRow[columns[col].id];
       let d = `${curVal}`;

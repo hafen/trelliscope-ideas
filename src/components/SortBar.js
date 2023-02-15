@@ -13,7 +13,7 @@ export default function SortBar({ metas, barWidth, metaData, panelInView }) {
   const { sortVars } = useSortContext();
   const { sortBar, barVarHeight } = useSortBarContext();
   const sortVar = sortVars[0];
-  console.log('sortBar', sortBar);
+
   const meta = useMemo(() => {
     return metas.filter((d) => d.varname === sortVar.name)[0];
   });
