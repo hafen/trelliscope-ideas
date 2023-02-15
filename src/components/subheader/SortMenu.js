@@ -147,7 +147,11 @@ function SortSelect({ metas, sortVars, setSortVars }) {
           </Fade>
         )}
       </Popper>
-      <IconButton onClick={handleClick()} aria-label="delete" fontSize="small">
+      <IconButton
+        onClick={handleClick()}
+        aria-label="add-icon"
+        fontSize="small"
+      >
         <AddCircleIcon fontSize="small" />
       </IconButton>
     </Box>

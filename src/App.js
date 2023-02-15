@@ -7,45 +7,32 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import SidebarContent from './components/sidebar/SidebarContent';
 import metas from './meta';
-import metaData from './metaData';
 import SortBar from './components/SortBar';
 import Panels from './components/Panels';
 import Table from './components/Table';
-import multiColumnSort from 'multi-column-sort';
-import { useSortContext } from './contexts/sortContext';
-import { useSidebarContext } from './contexts/sidebarContext';
-import { useLayoutContext } from './contexts/layoutContext';
 import Subheader from './components/subheader/Subheader';
 import Header from './components/Header';
+import { useSidebarContext } from './contexts/sidebarContext';
+import { useLayoutContext } from './contexts/layoutContext';
+import { useMetaDataContext } from './contexts/metaDataContext';
+import { useLabelContext } from './contexts/labelContext';
 
 const sortBarWidth = 36;
-
-const getColumnValue = (column, value) => value;
 
 export default function App() {
   // const theme = useTheme();
   const { sidebarOpen, sidebarWidth } = useSidebarContext();
+  const { metaData, sortedMetaData } = useMetaDataContext();
   const [selectedVars, setSelectedVars] = useState([
     metas[2],
     // metas[3],
     metas[0],
   ]);
-  const { sortVars } = useSortContext();
+
   const { layout } = useLayoutContext();
   const [panelInView, setPanelInView] = useState({});
-  const [labelVars, setLabelVars] = useState(['continent', 'country']);
+  const { labelVars, setLabelVars } = useLabelContext();
   const [columns, setColumns] = useState(3);
-
-  const sortedMetaData = useMemo(() => {
-    if (sortVars.length === 0) {
-      return metaData;
-    }
-    return multiColumnSort(
-      [...metaData],
-      sortVars.map((d) => Object.values(d)),
-      getColumnValue
-    );
-  }, [metaData, sortVars]);
 
   const extraWidth = sidebarWidth * sidebarOpen + sortBarWidth + 1;
 

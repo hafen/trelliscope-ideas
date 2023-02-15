@@ -12,19 +12,17 @@ import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
+import { useLabelContext } from '../../contexts/labelContext';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export default function VariableMultiSelect({
-  metas,
-  selectedVars,
-  setSelectedVars,
-}) {
+export default function ColumnsSelect({ metas, label }) {
   const [tagGroup, setTagGroup] = useState('__ALL__');
+  const { labelVars, setLabelVars } = useLabelContext();
 
   const handleChange = (event, value) => {
-    setSelectedVars(value);
+    setLabelVars(value);
   };
 
   const tagGroups = useMemo(() => {
@@ -55,11 +53,7 @@ export default function VariableMultiSelect({
 
   const VSPopper = useCallback((props) => {
     return (
-      <Popper
-        {...props}
-        style={{ paddingLeft: 100, width: 500 }}
-        placement="bottom-start"
-      />
+      <Popper {...props} style={{ width: 335 }} placement="bottom-start" />
     );
   });
 
@@ -67,20 +61,21 @@ export default function VariableMultiSelect({
     <Box sx={{ p: 1, display: 'flex', flexDirection: 'row' }}>
       <Autocomplete
         multiple
-        // open
+        open
         limitTags={0}
         id="variable-select"
-        options={metas}
+        options={metas.map((d) => d.varname)}
         // isOptionEqualToValue={(option, value) => option.varname === value}
         disableCloseOnSelect
         PopperComponent={VSPopper}
         PaperComponent={VSPaper}
         // size="small"
-        getOptionLabel={(option) => option.varname}
+        // getOptionLabel={(option) => option.varname}
         renderOption={(props, option, { selected }) => {
           const hasLabel = option.label && option.label !== option.varname;
           const showOption =
             tagGroup === '__ALL__' || option.tags.includes(tagGroup);
+          const optionVal = metas.filter((d) => d.varname === option)[0];
           return (
             <li {...props} style={{ display: showOption ? 'inherit' : 'none' }}>
               <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -92,11 +87,11 @@ export default function VariableMultiSelect({
                 />
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                   <div style={{ lineHeight: hasLabel ? '20px' : '36px' }}>
-                    {option.varname}
+                    {optionVal.varname}
                   </div>
                   {hasLabel && (
                     <div style={{ fontSize: 13, color: '#555555' }}>
-                      {option.label}
+                      {optionVal.label}
                     </div>
                   )}
                 </div>
@@ -104,7 +99,7 @@ export default function VariableMultiSelect({
             </li>
           );
         }}
-        value={selectedVars}
+        value={labelVars}
         onChange={handleChange}
         getLimitTagsText={(more) => (
           <span
@@ -112,11 +107,7 @@ export default function VariableMultiSelect({
           >{`${more} selected`}</span>
         )}
         renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Search or select variables to interact with"
-            placeholder=""
-          />
+          <TextField {...params} label={label} placeholder="" />
         )}
         // renderTags={(params) => {
         //   console.log(params);
@@ -127,7 +118,7 @@ export default function VariableMultiSelect({
   );
 }
 
-export function TagSelect({ tagGroups, tagGroup, setTagGroup }) {
+function TagSelect({ tagGroups, tagGroup, setTagGroup }) {
   const handleChange = (event) => {
     setTagGroup(event.target.value);
   };

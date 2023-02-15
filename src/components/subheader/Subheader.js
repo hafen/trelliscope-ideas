@@ -35,7 +35,7 @@ export default function Subheader({
         {layout === 'grid' && (
           <ColumnsMenu columns={columns} setColumns={setColumns} />
         )}
-        <LabelsMenu />
+        <LabelsMenu metas={metas} />
       </div>
       <div>
         <div
